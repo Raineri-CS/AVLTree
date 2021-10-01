@@ -165,9 +165,12 @@ int main(int argc, char *argv[]) {
       break;
     case READ_TREE:
       binTree = fopen("tree.bin", "rb");
-      readTreeFromFile(binTree, &tree.root);
-      fclose(binTree);
-      drawTree(&tree);
+      if (binTree != NULL) {
+        readTreeFromFile(binTree, &tree.root);
+        fclose(binTree);
+        drawTree(&tree);
+      }
+      printf("\"tree.bin\" nao existe!\n");
       break;
     default:
       break;
