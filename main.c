@@ -155,7 +155,7 @@ int main(int argc, char *argv[]) {
       if (retCode != FOUND) {
         printf("Termo nao encontrado!\n");
       } else {
-        printf("No encontrado! Tem como valor %d.\n", ptr->val);
+        printf("No encontrado! Tem como valor %d.\n", ptr->key);
       }
       break;
     case DUMP_TREE:
