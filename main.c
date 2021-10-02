@@ -464,7 +464,7 @@ void case1(node **ptr, unsigned int *h) {
 }
 
 void case2(node **ptr, unsigned int *h) {
-  node *ptu;
+  node *ptu, *ptv;
   ptu = (*ptr)->right;
 
   if (ptu->val == 1) {
@@ -473,19 +473,20 @@ void case2(node **ptr, unsigned int *h) {
     (*ptr)->val = 0;
     (*ptr) = ptu;
   } else {
-    ptu->left = ptu->right;
-    ptu->right = ptu;
-    (*ptr)->right = ptu->left;
-    ptu->left = (*ptr);
-    if (ptu->val == 1)
-      ptu->val = -1;
+    ptv = ptu->left;
+    ptu->left = ptv->right;
+    ptv->right = ptu;
+    (*ptr)->right = ptv->left;
+    ptv->left = (*ptr);
+    if (ptv->val == 1)
+      (*ptr)->val = -1;
     else
       (*ptr)->val = 0;
-    if (ptu->val == -1)
+    if (ptv->val == -1)
       ptu->val = 1;
     else
       ptu->val = 0;
-    (*ptr) = ptu;
+    (*ptr) = ptv;
   }
   (*ptr)->val = 0;
   *h = FALSE;
