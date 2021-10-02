@@ -437,27 +437,29 @@ void initNode(node **ptr, int x) {
 }
 
 void case1(node **ptr, unsigned int *h) {
-  node *ptu;
+  node *ptu, *ptv;
   ptu = (*ptr)->left;
+  
   if (ptu->val == -1) {
     (*ptr)->left = ptu->right;
     ptu->right = (*ptr);
     (*ptr)->val = 0;
     (*ptr) = ptu;
   } else {
-    ptu->right = ptu->left;
-    ptu->left = ptu;
-    (*ptr)->left = ptu->right;
-    ptu->right = (*ptr);
-    if (ptu->val == -1)
+    ptv = ptu->right;
+    ptu->right = ptv->left;
+    ptv->left = ptu;
+    (*ptr)->left = ptv->right;
+    ptv->right = (*ptr);
+    if (ptv->val == -1)
       (*ptr)->val = 1;
     else
       (*ptr)->val = 0;
-    if (ptu->val == 1)
+    if (ptv->val == 1)
       ptu->val = -1;
     else
       ptu->val = 0;
-    (*ptr) = ptu;
+    (*ptr) = ptv;
   }
   (*ptr)->val = 0;
   *h = FALSE;
