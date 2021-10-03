@@ -82,6 +82,13 @@ node *tree_min(node *root);
  */
 node *tree_max(node *root);
 node *getParent(node *child, node *root);
+/* Verifica a altura de um noh */
+unsigned int nodeHeight(node *n);
+/* Verifica o balanceamento em um noh -1 <= (He - Hd) <=1 */
+int checkBalanceOnNode(node *n);
+/* Atualiza os balancos em toda a arvore (usado apos a remocao), caso
+ * necessario, faz os balancos usando o caso 1 e 2 do slide */
+void updateBalanceOnTree(node **root);
 
 /* NOTE Funcoes de desenho */
 void drawTree(avlTree *tree);
@@ -144,6 +151,7 @@ int main(int argc, char *argv[]) {
         ptr->right = NULL;
         ptr->val = 0;
         free(ptr);
+        updateBalanceOnTree(&tree.root);
         printf("O termo %d foi removido com sucesso!\n", aux);
       }
       drawTree(&tree);
@@ -275,9 +283,8 @@ void search(node **root, int who, int *returnCode) {
 }
 
 void deleteNode(avlTree *tree, node *z) {
-  /* Se o da direita for vazio... */
+  /* Primeiros dois casos sao caso o no a ser deletado seja uma folha */
   if (z->left == NULL) {
-    /* Trocar this por this->right */
     transplant(tree, z, z->right);
   } else if (z->right == NULL) {
     transplant(tree, z, z->left);
@@ -436,10 +443,11 @@ void initNode(node **ptr, int x) {
   (*ptr)->val = 0;
 }
 
+/* ROTACAO DIREITA */
 void case1(node **ptr, unsigned int *h) {
   node *ptu, *ptv;
   ptu = (*ptr)->left;
-  
+
   if (ptu->val == -1) {
     (*ptr)->left = ptu->right;
     ptu->right = (*ptr);
@@ -465,6 +473,7 @@ void case1(node **ptr, unsigned int *h) {
   *h = FALSE;
 }
 
+/* ROTACAO ESQUERDA */
 void case2(node **ptr, unsigned int *h) {
   node *ptu, *ptv;
   ptu = (*ptr)->right;
@@ -545,4 +554,36 @@ void saveTreeToFile(node *root, FILE *treeBin) {
   free(temp);
   saveTreeToFile(root->right, treeBin);
   saveTreeToFile(root->left, treeBin);
+}
+
+unsigned int nodeHeight(node *n) {
+  unsigned int leftSideHeight, rightSideHeight;
+  if (n == NULL)
+    return 0;
+  leftSideHeight = nodeHeight(n->left);
+  rightSideHeight = nodeHeight(n->right);
+  return 1 + ((leftSideHeight > rightSideHeight) ? leftSideHeight
+                                                 : rightSideHeight);
+}
+
+int checkBalanceOnNode(node *n) {
+  return nodeHeight(n->left) - nodeHeight(n->right);
+}
+
+void updateBalanceOnTree(node **root) {
+  unsigned int h;
+  h = 0;
+  if (*root == NULL) {
+    return;
+  }
+  updateBalanceOnTree(&(*root)->left);
+  updateBalanceOnTree(&(*root)->right);
+  /* Zigrigdum de balancear */
+  (*root)->val = checkBalanceOnNode(*root);
+  /* O noh atual esta desbalanciado, casos que se aplicam : esquerda esquerda ou
+   * esquerda direita */
+  if ((*root)->val > 1)
+    case2(&(*root), &h);
+  else if ((*root)->val < -1)
+    case1(&(*root), &h);
 }
