@@ -580,8 +580,7 @@ void updateBalanceOnTree(node **root) {
   updateBalanceOnTree(&(*root)->right);
   /* Zigrigdum de balancear */
   (*root)->val = checkBalanceOnNode(*root);
-  /* O noh atual esta desbalanciado, casos que se aplicam : esquerda esquerda ou
-   * esquerda direita */
+  /* O noh atual esta desbalanciado */
   if ((*root)->val > 1)
     case2(&(*root), &h);
   else if ((*root)->val < -1)
