@@ -12,7 +12,7 @@ C linux program which supports the following opperations:
 
 ##### "The code must compile under gcc's C99 with no warnings or errors with the -Wall -Wextra -pedantic flags."
 ##### It was required to use predef c structs in the project, which are as follows:
-    ` struct s_no{
+    struct s_no{
         int32_t chave:28;
         int32_t bal:2;
         int32_t reservado:2; /* sem uso */
@@ -25,7 +25,7 @@ C linux program which supports the following opperations:
         int32_t bal:2;
         uint32_t esq:1;
         uint32_t dir:1;
-    };`
+    };
 ##### It was also required for all the things to be inside the main.c file.
 
 ##### The insertion, removal, search algorithms were implemented in accord to the teacher's specifications.
